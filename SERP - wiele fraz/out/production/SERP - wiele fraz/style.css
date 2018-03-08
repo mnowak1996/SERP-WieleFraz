@@ -1,0 +1,29 @@
+
+/**
+ * @author Created  by Michal Nowak
+ **/
+
+.v-box{
+    -fx-base: #98bc95;
+}
+.label{
+    -fx-padding: 5;
+    -fx-font-size: 22;
+    -fx-text-fill: #03430C;
+
+}
+.text-field{
+    -fx-font-size: 16;
+    -fx-background-color: white;
+}
+.button{
+    -fx-padding: 10;
+    -fx-base: #08BC1F;
+    -fx-text-fill: white;
+    -fx-font-size: 16;
+}
+.text-area{
+    -fx-font-size: 16;
+    -fx-base: white;
+
+}
