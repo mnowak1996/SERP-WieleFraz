@@ -59,9 +59,9 @@ public class SerpWieleFraz {
                         System.setProperty("webdriver.chrome.driver", "C:\\Users\\nowak\\Selenium\\chromedriver.exe"); // ustawienie miejsca dodaku do przegladarki chrome
                         WebDriver driver = new ChromeDriver(); // tworzenie obiektu przegldarki
                         driver.manage().timeouts().pageLoadTimeout(15, TimeUnit.SECONDS);// czeka 15 sekund, jesli storna sie nie zaladuje to odswieza
-                       // driver.manage().window().setPosition(new Point(-2000, 0)); // przeglądarka bdzie schowana
+                        driver.manage().window().setPosition(new Point(-2000, 0)); // przeglądarka bdzie schowana
                         driver.get("https://google.pl/");  // wejscie na strone google.pl
-                        Thread.sleep(4000); // 4 sekundy oczekiwania
+                        Thread.sleep(2000); // 2 sekundy oczekiwania
                         String source = driver.getPageSource(); // pobranie kodu zrodlowego strony
                         String pozycja = "Brak poączenia z internetem";
                         if (source.contains("ERR_INTERNET_DISCONNECTED")) { // sprawdzenie czy kod zrodlowy strony zawiera informacje o braku polaczneia z internetem
@@ -75,7 +75,7 @@ public class SerpWieleFraz {
                             driver.findElement(By.xpath("//*[@id='phrases']")).sendKeys(frazaPojedyncza); // wpisanie frazy
                             driver.findElement(By.xpath("//*[@id='domain']")).sendKeys(domena); // wpisanie nazwy domeny
                             driver.findElement(By.xpath("/html/body/div[3]/div[1]/div/div[2]/div[1]/div/form/div[2]/a")).click(); // klikniecie przyciksku sprawdz pozycje
-                            Thread.sleep(6000); // 6 sekund oczekiwania
+                            Thread.sleep(5300); // 5,3 sekund oczekiwania
                             pozycja = driver.findElement(By.xpath("//*[@id='result_0']")).getText(); // pobranie pozycji
                             driver.close(); // zakmniecie przeglądarki
                             driver.quit();   // wylaczenie przegladarki
@@ -83,7 +83,7 @@ public class SerpWieleFraz {
                             /////////////////////////////////////////////////////////////////
 
                             try {
-                                bufferedWriter.write(frazaPojedyncza + " - " + pozycja + "\n");
+                                bufferedWriter.write(frazaPojedyncza + " - " + pozycja + "\n"); //zapis danych do pliku
 
 
                             } catch (IOException ex) {
@@ -92,20 +92,18 @@ public class SerpWieleFraz {
                         }
                     }
                     bufferedWriter.close();
-                    Scanner scanner = new Scanner(file);    // utworzenie obiektu typu Scanner i przkazanie w konstruktorze
-                    // pliku
+                    Scanner scanner = new Scanner(file);    // utworzenie obiektu typu Scanner i przkazanie w konstruktorze pliku
                     String s="";                            // wstępna inicjalizacja pola typu String
-                    while(scanner.hasNextLine()){           // pętla w której łańcuch znaków jest powiększany do
-                        // ilości znaków w pliku tekstowym
+                    while(scanner.hasNextLine()){           // zapis fraz z pozycjmi do pliku
                         s = s +scanner.nextLine()+"\n";
                     }
-                    textArea.setText(s);
+                    textArea.setText(s); // wypisanie fraz z pozycjami
                     /////////////////////////////////////////////////////////////////
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {  // watek odpowiedzialny za komunikacje z GUI
                             labelPozycja.setText("Sprawdzono");
-                            // System.out.print(finalPozycja);
+                            buttonSprawdz.setDisable(false);
 
                         }
                     });
@@ -116,7 +114,8 @@ public class SerpWieleFraz {
         };
         try {
             new Thread(task).start(); // rozpoczecie dzialania watku
-            labelPozycja.setText("Sprawdzanie");
+            labelPozycja.setText("Sprawdzanie...");
+            buttonSprawdz.setDisable(true);
 
         } catch (Exception ex) {
             System.out.print(ex.getMessage());
