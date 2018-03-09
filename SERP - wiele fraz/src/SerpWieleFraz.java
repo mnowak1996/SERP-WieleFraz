@@ -33,9 +33,9 @@ public class SerpWieleFraz {
 
     @FXML
     public void Sprawdz() {
-        String s=textArea.getText();
-        String[] words=s.split("\n");
-        SprawdzPozycje(words,textDomena.getText());
+        String s = textArea.getText();
+        String[] words = s.split("\n");
+        SprawdzPozycje(words, textDomena.getText());
 
 
         //SprawdzPozycje(textFraza.getText(), textDomena.getText());
@@ -46,6 +46,7 @@ public class SerpWieleFraz {
             @Override
             public void run() {
                 try {
+                    String tekst = "";
                     File file = new File("src/Frazy.txt");
                     FileOutputStream fileOutputStream = new FileOutputStream(file);      // otworzenie
                     // strumienia przesyłającego znaki w postaci bajtowej
@@ -53,7 +54,7 @@ public class SerpWieleFraz {
                     // postać bajtową
                     BufferedWriter bufferedWriter = new BufferedWriter(outputStreamWriter); // obiekt odpowiedzialny
                     // za wysyłanie znaków
-                    for(String frazaPojedyncza:fraza) {
+                    for (String frazaPojedyncza : fraza) {
 
 
                         System.setProperty("webdriver.chrome.driver", "C:\\Users\\nowak\\Selenium\\chromedriver.exe"); // ustawienie miejsca dodaku do przegladarki chrome
@@ -63,9 +64,9 @@ public class SerpWieleFraz {
                         driver.get("https://google.pl/");  // wejscie na strone google.pl
                         Thread.sleep(2000); // 2 sekundy oczekiwania
                         String source = driver.getPageSource(); // pobranie kodu zrodlowego strony
-                        String pozycja = "Brak poączenia z internetem";
+                        String pozycja = "";
                         if (source.contains("ERR_INTERNET_DISCONNECTED")) { // sprawdzenie czy kod zrodlowy strony zawiera informacje o braku polaczneia z internetem
-                            labelPozycja.setText("Brak polaczenia z internetem");
+                            tekst = "Brak polaczenia z internetem";
                             driver.close(); // zakmniecie przeglądarki
                             driver.quit();  // wylaczenie przegladarki
 
@@ -93,16 +94,17 @@ public class SerpWieleFraz {
                     }
                     bufferedWriter.close();
                     Scanner scanner = new Scanner(file);    // utworzenie obiektu typu Scanner i przkazanie w konstruktorze pliku
-                    String s="";                            // wstępna inicjalizacja pola typu String
-                    while(scanner.hasNextLine()){           // zapis fraz z pozycjmi do pliku
-                        s = s +scanner.nextLine()+"\n";
+                    String s = "";                            // wstępna inicjalizacja pola typu String
+                    while (scanner.hasNextLine()) {           // zapis fraz z pozycjmi do pliku
+                        s = s + scanner.nextLine() + "\n";
                     }
                     textArea.setText(s); // wypisanie fraz z pozycjami
+                    String finalText = tekst;
                     /////////////////////////////////////////////////////////////////
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {  // watek odpowiedzialny za komunikacje z GUI
-                            labelPozycja.setText("Sprawdzono");
+                            labelPozycja.setText(finalText);
                             buttonSprawdz.setDisable(false);
 
                         }
